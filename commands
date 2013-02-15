@@ -1,0 +1,2 @@
+mount /dev/sda5 -o uid=1000,gid=100,umask=022 /media/fermat/
+mount /dev/sda6 -o uid=1000,gid=100,umask=022 /media/gauss/

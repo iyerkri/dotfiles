@@ -1,0 +1,121 @@
+!Urxvt config
+
+!Make urls clickable in urxvt
+
+urxvt.perl-ext-common:	   default,matcher
+urxvt.urlLauncher:	   /usr/bin/firefox
+urxvt.matcher.button:	   1
+urxvt.matcher.pattern.1:   \bwww\.[\w-]\.[\w./?&@#-]*[\w/-]
+
+
+! urxvt settings & colors
+
+urxvt*background:          #121212
+urxvt*cursorBlink:         false
+urxvt*cursorColor:         #86a2be
+urxvt*font:                -*-terminus-medium-*-*-*-14-*-*-*-*-*-*-*
+urxvt*boldFont:            -*-terminus-bold-*-*-*-14-*-*-*-*-*-*-*
+!urxvt*transparent:       false
+urxvt:borderLess:       true
+
+urxvt*foreground:          white
+urxvt*geometry:            120x25
+
+! V
+!urxvt*inheritPixmap:       true
+urxvt*internalBorder:      0
+urxvt*saveLines:           4000
+urxvt*scrollBar:           false
+! V
+urxvt*shading:             15
+urxvt*termName:            rxvt-256color
+urxvt*fading:              20
+! V
+!urxvt*tintColor:          #ffffff
+urxvt*underlineColor:      #86a2be
+
+
+
+!black text
+urxvt*color0:              #242424
+urxvt*color8:              #cdb5cd
+
+!red text
+urxvt*color1:              #bf7979
+!urxvt*color9:              #f4a45f
+urxvt*color9:              #ebac54
+
+!green text
+urxvt*color2:              #97b26b
+urxvt*color10:             #c5f779
+
+!yellow text
+urxvt*color3:              #cdcda1
+urxvt*color11:             #ffffaf
+
+!blue text
+urxvt*color4:              #86a2be
+urxvt*color12:             #98afd9
+
+!magenta text
+urxvt*color5:              #d9b798
+urxvt*color13:             #d7d998
+
+!cyan text
+urxvt*color6:              #a1b5cd
+urxvt*color14:             #a1b5cd
+
+!white
+urxvt*color7:              #ffffff
+urxvt*color15:             #dedede
+
+
+! XTerm config
+
+XTerm*termName:            xterm-256color
+xterm*foreground:          white
+xterm*background:          #121212
+xterm*cursorBlink:         false
+xterm*cursorColor:         #86a2be
+xterm*font:                -*-terminus-medium-*-*-*-14-*-*-*-*-*-*-*
+xterm*boldFont:            -*-terminus-bold-*-*-*-14-*-*-*-*-*-*-*
+!xterm*font: 		   -*-dina-medium-r-*-*-*-*-*-*-*-*-*-*
+!xterm*transparent:       false
+xterm:borderLess:       true
+
+!black text
+xterm*color0:              #242424
+xterm*color8:              #cdb5cd
+
+!red text
+xterm*color1:              #bf7979
+!xterm*color9:              #f4a45f
+xterm*color9:              #ebac54
+
+!green text
+xterm*color2:              #97b26b
+xterm*color10:             #c5f779
+
+!yellow text
+xterm*color3:              #cdcda1
+xterm*color11:             #ffffaf
+
+!blue text
+xterm*color4:              #86a2be
+xterm*color12:             #98afd9
+
+!magenta text
+xterm*color5:              #d9b798
+xterm*color13:             #d7d998
+
+!cyan text
+xterm*color6:              #a1b5cd
+xterm*color14:             #a1b5cd
+
+!white
+xterm*color7:              #ffffff
+xterm*color15:             #dedede
+
+!Emacs config
+
+Emacs*font:		   -*-terminus-medium-*-*-*-14-*-*-*-*-*-*-*

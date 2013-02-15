@@ -1,0 +1,74 @@
+\RequirePackage[l2tabu,orthodox]{nag}
+\documentclass{article}
+
+\usepackage{amsmath, amssymb, amsthm} % ams packages %amsfonts is loaded by amssymb
+\usepackage[all,warning]{onlyamsmath}
+\usepackage{graphics, graphicx} % graphics packages
+
+
+\usepackage[margin=1in]{geometry} % more reasonable margins
+\usepackage{booktabs} % prettier tables
+\usepackage{units} % prettier fractions (?)
+\usepackage{tgschola} % font
+\usepackage{microtype} % prettier texts (must load after loading fonts)
+
+% Small sections of multiple columns
+\usepackage{multicol}
+
+\usepackage{natbib}
+
+\usepackage{tikz} % make graphics in latex
+\usetikzlibrary{shapes,decorations}
+\usetikzlibrary{arrows}
+\usepackage{pgfplots} % to make plots in latex
+\pgfplotsset{compat=newest} % compatibility issue
+
+% formatting
+\usepackage{fancyhdr} % for changing headers and footers
+\usepackage{url} % url 
+\usepackage[normalem]{ulem}
+\usepackage{color} % colored text + names %deprecated?
+
+% hyperlink in the document
+\usepackage{hyperref} % must be the last package loaded
+
+% notations
+\newcommand{\one}{\ensuremath{\mathbf{1}}}
+\newcommand{\zero}{\ensuremath{\mathbf{0}}}
+\newcommand{\prob}{\ensuremath{\mathbf{P}}}
+\newcommand{\expec}{\ensuremath{\mathbf{E}}}
+\newcommand{\ind}{\ensuremath{\mathbf{I}}}
+\newcommand{\reals}{\ensuremath{\mathbb{R}}}
+\newcommand{\naturals}{\ensuremath{\mathbb{N}}}
+\newcommand{\defeq}{\ensuremath{\triangleq}}
+\newcommand{\sP}{\ensuremath{\mathsf{P}}}
+\newcommand{\sQ}{\ensuremath{\mathsf{Q}}}
+\newcommand{\sE}{\ensuremath{\mathsf{E}}}
+
+% environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+\newtheorem{remark}{Remark}
+\newtheorem{definition}{Definition}
+\newtheorem{assumption}{Assumption}
+
+% editing commands 
+\newcommand{\todo}[1]{\textcolor{BrickRed}{TODO: #1}}
+\newcommand{\newkris}[1]{\textcolor{Blue}{#1}}
+\newcommand{\delkris}[1]{\textcolor{Blue}{\sout #1}}
+
+
+
+\title{Template for latex file}
+\date{\today}
+\author{Krishnamurthy Iyer}
+
+\begin{document}
+\maketitle
+
+
+
+\end{document}
+
