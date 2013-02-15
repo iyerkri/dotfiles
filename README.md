@@ -1,0 +1,1 @@
+This folder contains some bash scripts I wrote/modified, and some commonly used templates and config files.
