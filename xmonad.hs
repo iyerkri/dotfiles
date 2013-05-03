@@ -80,6 +80,8 @@ myKeys =   [ ((myModMask, xK_z), spawn "slock")
 	   , ((0, 0x1008ff13), spawn "amixer sset Master 3%+")
 	   , ((0, 0x1008ff02), spawn "xbacklight -inc 5")
 	   , ((0, 0x1008ff03), spawn "xbacklight -dec 5")
+	   , ((myModMask, xK_e), spawn "emacs")
+	   , ((myModMask, xK_r), spawn "rox")
 	   ]
 
 myDzenPP = dzenPP

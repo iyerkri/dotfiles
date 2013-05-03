@@ -33,6 +33,7 @@ feh --bg-scale '/home/kris/art/wallpapers/wallpaper.png'
 # sleep 37;
 # done &
 # exec /home/kris/dwm/dwm-072c62ed10f2/dwm
+xmodmap ~/.Xmodmap
 exec /usr/bin/xmonad
 # exec /usr/bin/gnome-session
 # exec /usr/bin/openbox-session
