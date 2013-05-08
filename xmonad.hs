@@ -31,7 +31,7 @@ myTerm = "urxvt"
 myNormalBorderColor  = "#33486C"
 myFocusedBorderColor = "#86A2BE"
 
-myWorkspaces = clickable . (map dzenEscape) $ ["mail", "web", "emacs", "org"] ++ map show [5..9]
+myWorkspaces = clickable . (map dzenEscape) $ ["mail", "web", "org", "emacs"] ++ map show [5..9]
 	    where clickable l = ["^ca(1, xdotool key super+" ++ show(i) ++ ")" ++ ws ++ "^ca()" |
 	    	  	          (i,ws) <- zip [1..] l ]
 
