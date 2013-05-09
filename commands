@@ -1,2 +1,9 @@
 mount /dev/sda5 -o uid=1000,gid=100,umask=022 /media/fermat/
 mount /dev/sda6 -o uid=1000,gid=100,umask=022 /media/gauss/
+
+
+To produce linearized PDFs in linux, use the following "FastWebView" switch in gs:
+
+gs -dFastWebView=true -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=output.pdf input.pdf 
+
+This is useful for uploading to some journals, which for some reason only accept linearized pdfs. (Another way is to open the file in Adobe Acrobat and save it once.) 
