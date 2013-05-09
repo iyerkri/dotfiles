@@ -67,7 +67,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(inhibit-startup-screen t)
- '(org-agenda-files (quote ("~/organizer/agenda/research.org" "~/organizer/agenda/admin.org" "~/organizer/agenda/service.org" "~/organizer/agenda/old-single-file-agenda.org"))))
+ '(org-agenda-files (quote ("~/organizer/agenda/research.org" "~/organizer/agenda/admin.org" "~/organizer/agenda/service.org" "~/organizer/agenda/meetings.org"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
