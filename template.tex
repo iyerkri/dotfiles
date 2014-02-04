@@ -1,4 +1,4 @@
-\RequirePackage[l2tabu,orthodox]{nag}
+\RequirePackage[l2tabu,orthodox]{nag} % Nag for deprecated usage
 \documentclass{article}
 
 \usepackage{amsmath, amssymb, amsthm} % ams packages %amsfonts is loaded by amssymb
@@ -17,17 +17,19 @@
 
 \usepackage{natbib}
 
+% formatting
+\usepackage{fancyhdr} % for changing headers and footers
+\usepackage{url} % url 
+\usepackage[normalem]{ulem}
+% The color package must be loaded before Tikz/pgfplot
+\usepackage[dvipsnames]{color} % colored text + names %deprecated?
+
+% Tikz+pgfplot
 \usepackage{tikz} % make graphics in latex
 \usetikzlibrary{shapes,decorations}
 \usetikzlibrary{arrows}
 \usepackage{pgfplots} % to make plots in latex
 \pgfplotsset{compat=newest} % compatibility issue
-
-% formatting
-\usepackage{fancyhdr} % for changing headers and footers
-\usepackage{url} % url 
-\usepackage[normalem]{ulem}
-\usepackage{color} % colored text + names %deprecated?
 
 % hyperlink in the document
 \usepackage{hyperref} % must be the last package loaded
