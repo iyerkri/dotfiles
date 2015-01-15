@@ -15,7 +15,7 @@ if [ $? -eq 0 ]; then
     xrandr --output LVDS1 --off --output VGA1 --auto
     # If laptop is in the base, then start the music player daemon
     #mpdscribble
-    #mpd /home/kris/.mpd/config
+    #mpd /home/kriyer/.mpd/config
     # Alternative command in case of trouble:
     # (sleep 2; xrandr --auto) &
 fi
@@ -24,7 +24,7 @@ xset +fp /usr/share/fonts/local
 xset fp rehash
 xsetroot -cursor_name left_ptr
 xbacklight =40
-feh --bg-scale '/home/kris/art/wallpapers/wallpaper.png'
+feh --bg-scale '/home/kriyer/art/wallpapers/wallpaper.png'
 # while true; 
 # do
 # battery="BAT=$(acpi -b | sed -e 's/.*, \(.*%\).*/\1/') | ";
@@ -32,7 +32,7 @@ feh --bg-scale '/home/kris/art/wallpapers/wallpaper.png'
 # xsetroot -name "${battery}${clock}";
 # sleep 37;
 # done &
-# exec /home/kris/dwm/dwm-072c62ed10f2/dwm
+# exec /home/kriyer/dwm/dwm-072c62ed10f2/dwm
 xmodmap ~/.Xmodmap
 exec /usr/bin/xmonad
 # exec /usr/bin/gnome-session
