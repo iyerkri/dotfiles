@@ -24,7 +24,9 @@ xset +fp /usr/share/fonts/local
 xset fp rehash
 xsetroot -cursor_name left_ptr
 xbacklight =40
-feh --bg-scale '/home/kriyer/art/wallpapers/wallpaper.png'
+files=(/home/kriyer/art/wallpapers/tiling-wallpapers/*)
+feh --bg-tile `printf "%s\n" "${files[RANDOM % ${#files[@]}]}"`
+#feh --bg-scale '/home/kriyer/art/wallpapers/wallpaper.png'
 # while true; 
 # do
 # battery="BAT=$(acpi -b | sed -e 's/.*, \(.*%\).*/\1/') | ";
@@ -34,7 +36,11 @@ feh --bg-scale '/home/kriyer/art/wallpapers/wallpaper.png'
 # done &
 # exec /home/kriyer/dwm/dwm-072c62ed10f2/dwm
 xmodmap ~/.Xmodmap
-exec /usr/bin/xmonad
+xrdb .Xresources
+redshift -l 42:-76 &
+exec /usr/bin/i3
+# exec /usr/bin/wmii
+# exec /usr/bin/xmonad
 # exec /usr/bin/gnome-session
 # exec /usr/bin/openbox-session
 # exec /usr/bin/subtle
