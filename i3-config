@@ -15,7 +15,8 @@ set $mod Mod4
 # is used in the bar {} block below.
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
-font  -*-terminus-medium-*-*-*-14-*-*-*-*-*-*-* #pango:DejaVu Sans Mono 8
+font  -*-terminus-medium-*-*-*-14-*-*-*-*-*-*-*
+# pango:DejaVu Sans Mono 8
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 # The font above is very space-efficient, that is, it looks good, sharp and
@@ -90,9 +91,9 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 
 # switch to workspace
-bindsym $mod+1 workspace 1
-bindsym $mod+2 workspace 2
-bindsym $mod+3 workspace 3
+bindsym $mod+1 workspace 1:mail
+bindsym $mod+2 workspace 2:web
+bindsym $mod+3 workspace 3:emacs
 bindsym $mod+4 workspace 4
 bindsym $mod+5 workspace 5
 bindsym $mod+6 workspace 6
@@ -105,9 +106,9 @@ bindsym $mod+n workspace next
 bindsym $mod+m workspace prev
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace 1
-bindsym $mod+Shift+2 move container to workspace 2
-bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+1 move container to workspace 1:mail
+bindsym $mod+Shift+2 move container to workspace 2:web
+bindsym $mod+Shift+3 move container to workspace 3:emacs
 bindsym $mod+Shift+4 move container to workspace 4
 bindsym $mod+Shift+5 move container to workspace 5
 bindsym $mod+Shift+6 move container to workspace 6
@@ -134,10 +135,10 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
@@ -150,14 +151,38 @@ mode "resize" {
         bindsym Escape mode "default"
 }
 
+new_window pixel 3
+
 bindsym $mod+Shift+r mode "resize"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        status_command i3status
+	status_command i3status
+	strip_workspace_numbers yes
+	position top
+	font -*-terminus-medium-*-*-*-14-*-*-*-*-*-*-*
+	colors {
+	       background #002b36
+	       statusline #839496
+	       urgent_workspace #dc322f #dc322f #ffffff
+	       focused_workspace #839496 #002b36 #2aa198
+	       inactive_workspace #002b36 #002b36 #839496 
+	       active_workspace #839496 #002b36 #839496 
+ 	}
 }
 
 
 # my programs
 bindsym $mod+r exec "rox"
+
+
+# Assign Thunderbird to workspace 1:mail
+
+assign [class="Thunderbird"] 1:mail
+
+# Assign Firefox to workspace 2:web
+
+assign [class="Firefox"] 2:web
+
+
