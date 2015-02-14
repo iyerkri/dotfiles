@@ -94,8 +94,8 @@ bindsym $mod+a focus parent
 # switch to workspace
 bindsym $mod+1 workspace 1:mail
 bindsym $mod+2 workspace 2:web
-bindsym $mod+3 workspace 3:emacs
-bindsym $mod+4 workspace 4
+bindsym $mod+3 workspace 3:org
+bindsym $mod+4 workspace 4:emacs
 bindsym $mod+5 workspace 5
 bindsym $mod+6 workspace 6
 bindsym $mod+7 workspace 7
@@ -109,8 +109,8 @@ bindsym $mod+m workspace prev
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace 1:mail
 bindsym $mod+Shift+2 move container to workspace 2:web
-bindsym $mod+Shift+3 move container to workspace 3:emacs
-bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+3 move container to workspace 3:org
+bindsym $mod+Shift+4 move container to workspace 4:emacs
 bindsym $mod+Shift+5 move container to workspace 5
 bindsym $mod+Shift+6 move container to workspace 6
 bindsym $mod+Shift+7 move container to workspace 7
