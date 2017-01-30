@@ -38,6 +38,7 @@ feh --bg-tile `printf "%s\n" "${files[RANDOM % ${#files[@]}]}"`
 xmodmap ~/.Xmodmap
 xrdb .Xresources
 redshift -l 42:-76 &
+compton --xrender-sync --xrender-sync-fence -i 0.85 -b
 exec /usr/bin/i3
 # exec /usr/bin/wmii
 # exec /usr/bin/xmonad
