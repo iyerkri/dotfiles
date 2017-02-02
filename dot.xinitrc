@@ -36,9 +36,9 @@ feh --bg-tile `printf "%s\n" "${files[RANDOM % ${#files[@]}]}"`
 # done &
 # exec /home/kriyer/dwm/dwm-072c62ed10f2/dwm
 xmodmap ~/.Xmodmap
-xrdb .Xresources
+xrdb -merge .Xresources
 redshift -l 42:-76 &
-compton --xrender-sync --xrender-sync-fence -i 0.85 -b
+compton --xrender-sync --xrender-sync-fence -i 0.85 &
 exec /usr/bin/i3
 # exec /usr/bin/wmii
 # exec /usr/bin/xmonad
