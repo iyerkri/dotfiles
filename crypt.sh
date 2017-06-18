@@ -1,3 +1,3 @@
 #!/bin/bash
 
-gpg2 -d --batch -passphrase-file pp /home/kriyer/.config/local-crypt/msmtpmbsyncpp.gpg
+gpg2 -d --for-your-eyes-only -q --no-tty --batch --passphrase-file /home/kriyer/linux/dotfiles/pp $1
