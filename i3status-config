@@ -18,7 +18,7 @@ general {
 }
 
 #order += "ipv6"
-order += "disk /"
+order += "disk /home"
 order += "load"
 #order += "run_watch DHCP"
 #order += "run_watch VPN"
@@ -75,10 +75,10 @@ tztime local {
 }
 
 load {
-        format = " %1min %5min"
+        format = " %1min %5min %15min"
 }
 
-disk "/" {
+disk "/home" {
      format = " %avail"
 }
 
