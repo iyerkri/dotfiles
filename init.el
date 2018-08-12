@@ -1,8 +1,18 @@
+;;; init.el ---  Initialization file for Emacs
+;;; Commentary:
+;;; Emacs Startup File --- initialization for Emacs
+
+;;; Code:
+
+;; move customizations to a separate file
+;; from http://emacsblog.org/2008/12/06/quick-tip-detaching-the-custom-file/
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file 'noerror)
+
+
 (require 'package)
 (add-to-list 'package-archives
-	     '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/") t)
+             '("melpa" . "https://melpa.org/packages/"))
 
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
@@ -23,18 +33,19 @@
 (scroll-bar-mode -1)
 
 
+
 ;; Modified from http://emacs-fu.blogspot.com/2009/12/changing-cursor-color-and-shape.html
 (setq cursor-read-only-color       "gray")
 ;; valid values are t, nil, box, hollow, bar, (bar . WIDTH), hbar,
 ;; (hbar. HEIGHT); see the docs for set-cursor-type
-(setq cursor-read-only-cursor-type 'hbar)
+(setq cursor-read-only-cursor-type 'bar)
 (setq cursor-overwrite-color       "red")
 (setq cursor-overwrite-cursor-type 'box)
 (setq cursor-normal-color          "#859900")
 (setq cursor-normal-cursor-type    'box)
 
 (defun set-cursor-according-to-mode ()
-  "change cursor color and type according to some minor modes."
+  "Change cursor color and type according to some minor modes."
 
   (cond
     (buffer-read-only
@@ -50,8 +61,68 @@
 (add-hook 'post-command-hook 'set-cursor-according-to-mode)
 
 
-;; Solarized theme
-(load-theme 'solarized-dark t)
+
+;; Solarized theme + customizations
+(use-package solarized-theme
+  :ensure t
+  :init
+  (setq solarized-use-variable-pitch nil)  ;; no font size changes
+  (setq solarized-emphasize-indicators nil) ;; less emphasis on errors
+  (load-theme 'solarized-dark t))
+
+
+;; powerline
+(use-package powerline
+  :ensure t
+  :init (powerline-default-theme))
+
+;; smart-mode-line
+(use-package smart-mode-line
+  :ensure t
+  :config
+  (sml/setup)
+  (setq sml/theme 'automatic))
+
+
+;; flycheck
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+
+
+;; better undo?
+(use-package undo-tree
+  :ensure t
+  :diminish undo-tree-mode
+  :config
+  (global-undo-tree-mode)
+  (setq undo-tree-visualizer-timestamps t)
+  (setq undo-tree-visualizer-diff t))
+
+
+(use-package helm
+  :ensure t
+  :bind (("M-x" . helm-M-x)
+	 ("C-x C-f" . helm-find-files)))
+	 
+
+
+;; pdf-tools
+(use-package pdf-tools
+  :ensure t
+  :config
+  (pdf-tools-install)
+  (setq-default pdf-view-display-size 'fit-page))
+
+
+  
+;; Use pdf-tools to open PDF files
+(setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+      TeX-source-correlate-start-server t)
+
+;; Update PDF buffers after successful LaTeX runs
+(add-hook 'TeX-after-compilation-finished-functions
+	  #'TeX-revert-document-buffer)
 
 
 ;; Auctex and reftex config
@@ -65,23 +136,9 @@
 ;; http://www.gnu.org/software/auctex/manual/auctex/Multifile.html
 (setq-default TeX-master nil) ; Query for master file.
 
-
-;; pdf-tools
-(pdf-tools-install)
-
-
-;; flycheck
-(require 'flycheck)
-(add-hook 'after-init-hook 'global-flycheck-mode)
-
-
-;; powerline
-(require 'powerline)
-(powerline-default-theme)
+;; latex-extra
+(add-hook 'LaTeX-mode-hook #'latex-extra-mode)
 
 
 
-;; move customizations to a separate file
-;; from http://emacsblog.org/2008/12/06/quick-tip-detaching-the-custom-file/
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file 'noerror)
+;;; init.el ends here
