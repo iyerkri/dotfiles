@@ -99,6 +99,12 @@
   (setq undo-tree-visualizer-timestamps t)
   (setq undo-tree-visualizer-diff t))
 
+;; needs to happen before helm?
+(use-package helm-flx
+  :ensure t
+  :config
+  (helm-flx-mode 1))
+
 
 (use-package helm
   :ensure t
@@ -112,19 +118,12 @@
   :ensure t
   :config
   (pdf-tools-install)
-  (setq-default pdf-view-display-size 'fit-page))
+  (setq-default pdf-view-display-size 'fit-page)
+  (setq pdf-view-resize-factor 1.1)
+  (setq pdf-annot-activate-created-annotations t))
 
 
   
-;; Use pdf-tools to open PDF files
-(setq TeX-view-program-selection '((output-pdf "PDF Tools"))
-      TeX-source-correlate-start-server t)
-
-;; Update PDF buffers after successful LaTeX runs
-(add-hook 'TeX-after-compilation-finished-functions
-	  #'TeX-revert-document-buffer)
-
-
 ;; Auctex and reftex config
 ;; see https://tex.stackexchange.com/questions/20843/useful-shortcuts-or-key-bindings-or-predefined-commands-for-emacsauctex for more.
 (load "auctex.el" nil t t)
@@ -136,9 +135,32 @@
 ;; http://www.gnu.org/software/auctex/manual/auctex/Multifile.html
 (setq-default TeX-master nil) ; Query for master file.
 
-;; latex-extra
-(add-hook 'LaTeX-mode-hook #'latex-extra-mode)
+;; Use pdf-tools to open PDF files
+(setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+      TeX-source-correlate-start-server t)
 
+;; Update PDF buffers after successful LaTeX runs
+(add-hook 'TeX-after-compilation-finished-functions
+	  #'TeX-revert-document-buffer)
+
+
+;; latex-extra
+(use-package latex-extra
+  :ensure t
+  :hook (LaTeX-mode . latex-extra-mode))
+
+(use-package multiple-cursors
+  :ensure t
+  :bind (("C-." . mc/mark-next-like-this)
+         ("C-," . mc/unmark-next-like-this)
+	 ("C-c C-." . mc/mark-previous-like-this)
+	 ("C-c C-," . mc/unmark-previous-like-this)
+         ("C-S-<mouse-1>" . mc/add-cursor-on-click)))
+
+(use-package magit
+  :ensure t
+  :bind (("C-x g" . magit-status)))
+	 
 
 
 ;;; init.el ends here
