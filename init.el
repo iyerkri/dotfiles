@@ -90,15 +90,6 @@
   :init (global-flycheck-mode))
 
 
-;; better undo?
-(use-package undo-tree
-  :ensure t
-  :diminish undo-tree-mode
-  :config
-  (global-undo-tree-mode)
-  (setq undo-tree-visualizer-timestamps t)
-  (setq undo-tree-visualizer-diff t))
-
 ;; needs to happen before helm?
 (use-package helm-flx
   :ensure t
