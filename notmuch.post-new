@@ -1,0 +1,9 @@
+#!/bin/sh
+
+notmuch tag +inbox +unread -new -- 'tag:new and folder:cornell/INBOX'
+notmuch tag +sent -new -unread -- 'tag:new and folder:cornell/Sent'
+notmuch tag +sent -new -unread -- 'tag:new and folder:"cornell/Sent Items"'
+notmuch tag +deleted -new -unread -- 'tag:new and folder:"cornell/Deleted Items"'
+notmuch tag +deleted -new -unread -- 'tag:new and folder:"cornell/Trash"'
+notmuch tag +draft -new -- 'tag:new and folder:"cornell/Drafts"'
+notmuch tag -new -- tag:new

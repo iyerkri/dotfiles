@@ -178,6 +178,7 @@ bar {
 
 # my programs
 bindsym $mod+r exec "rox"
+bindsym $mod+e exec "$VISUAL"
 
 
 # Assign Thunderbird to workspace 1: mail
@@ -189,3 +190,5 @@ assign [class="Thunderbird"] 1: mail
 assign [class="Firefox"] 2: web
 
 
+for_window [class = "gnuplot_qt"] floating enable
+for_window [class = "gnuplot_qt"] resize set 1600 900
