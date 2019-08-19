@@ -101,7 +101,7 @@
   :ensure t
   :bind (("M-x" . helm-M-x)
 	 ("C-x C-f" . helm-find-files)))
-	 
+
 
 
 ;; pdf-tools
@@ -151,7 +151,242 @@
 (use-package magit
   :ensure t
   :bind (("C-x g" . magit-status)))
-	 
+
+
+;; beacon mode
+(use-package beacon
+  :ensure t
+  :config
+  (beacon-mode t)
+  (setq beacon-color cursor-normal-color))
+
+
+;; org-mode config
+;; added from many places: David O'Toole Org tutorial
+;; and Aaron Bedra's Emacs 26 Configuration
+(require 'org)
+(add-to-list 'org-modules "org-habit")
+(setq org-habit-preceding-days 7
+      org-habit-following-days 1
+      org-habit-graph-column 80
+      org-habit-show-habits-only-for-today t
+      org-habit-show-all-today t)
+		    
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(setq org-log-done t
+      org-todo-keywords '((sequence "TODO" "INPROGRESS" "DONE"))
+      org-todo-keyword-faces '(("INPROGRESS" . (:foreground "blue" :weight bold))))
+
+(setq org-agenda-files 
+      (list "~/Dropbox/org/work.org"  "~/Dropbox/org/research.org" "~/Dropbox/org/personal.org"))
+
+
+(setq org-agenda-show-log t
+      org-agenda-todo-ignore-scheduled t
+      org-agenda-todo-ignore-deadlines t)
+
+;; stolen from https://zzamboni.org/post/beautifying-org-mode-in-emacs/
+(setq org-hide-emphasis-markers t)
+
+(font-lock-add-keywords 'org-mode
+                        '(("^ *\\([-]\\) "
+                           (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
+(use-package org-bullets
+  :ensure t
+  :commands (org-bullets-mode)
+  :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+;; notmuch config
+(require 'notmuch)
+(define-key global-map "\C-cn" 'notmuch)
+;; adapted from https://notmuchmail.org/emacstips/
+
+(defun nm-show-delete ()
+  "Toggle deleted tag for message."
+  (interactive)
+  (if (member "deleted" (notmuch-show-get-tags))
+      (notmuch-show-tag (list "-deleted"))
+    (notmuch-show-tag (list "+deleted"))))
+
+(defun nm-tree-delete ()
+  "Toggle deleted tag for message."
+    (interactive)
+    (if (member "deleted" (notmuch-tree-get-tags))
+        (notmuch-tree-tag (list "-deleted"))
+      (notmuch-tree-tag (list "+deleted"))))
+
+(defun nm-search-delete ()
+  "Toggle deleted tag for message."  
+    (interactive)
+    (if (member "deleted" (notmuch-search-get-tags))
+        (notmuch-search-tag (list "-deleted"))
+      (notmuch-search-tag (list "+deleted"))))
+
+(define-key notmuch-show-mode-map "d" 'nm-show-delete)
+(define-key notmuch-tree-mode-map "d" 'nm-tree-delete)
+(define-key notmuch-search-mode-map "d" 'nm-search-delete)
+
+(define-prefix-command 'nm-show-tag-map)
+(define-prefix-command 'nm-tree-tag-map)
+(define-prefix-command 'nm-search-tag-map)
+(define-key notmuch-show-mode-map "g" 'nm-show-tag-map)
+(define-key notmuch-tree-mode-map "g" 'nm-tree-tag-map)
+(define-key notmuch-search-mode-map "g" 'nm-search-tag-map)
+
+(define-key nm-show-tag-map "t"
+  (lambda ()
+    "toggle courses (and current course) tag for message"
+    (interactive)
+    (if (member "thiscourse" (notmuch-show-get-tags))
+        (notmuch-show-tag (list "-thiscourse" "-courses" "+inbox"))
+      (notmuch-show-tag (list "+thiscourse" "+courses" "-inbox")))))
+
+(define-key nm-show-tag-map "c"
+  (lambda ()
+    "toggle courses tag for message"
+    (interactive)
+    (if (member "courses" (notmuch-show-get-tags))
+        (notmuch-show-tag (list "-courses" "+inbox"))
+      (notmuch-show-tag (list "+courses" "-inbox")))))
+
+(define-key nm-show-tag-map "m"
+  (lambda ()
+    "toggle mEng tag for message"
+    (interactive)
+    (if (member "mEng" (notmuch-show-get-tags))
+	(notmuch-show-tag (list "-mEng" "+inbox"))
+      (notmuch-show-tag (list "+mEng" "-inbox")))))
+
+(define-key nm-show-tag-map "r"
+  (lambda ()
+    "toggle review tag for message"
+    (interactive)
+    (if (member "review" (notmuch-show-get-tags))
+	(notmuch-show-tag (list "-review" "+inbox"))
+      (notmuch-show-tag (list "+review" "-inbox")))))
+
+(define-key nm-show-tag-map "g"
+  (lambda ()
+    "toggle grants tag for message"
+    (interactive)
+    (if (member "grants" (notmuch-show-get-tags))
+	(notmuch-show-tag (list "-grants" "+inbox"))
+      (notmuch-show-tag (list "+grants" "-inbox")))))
+
+(define-key nm-tree-tag-map "t"
+  (lambda ()
+    "toggle courses (and current course) tag for message"
+    (interactive)
+    (if (member "thiscourse" (notmuch-tree-get-tags))
+        (notmuch-tree-tag (list "-thiscourse" "-courses" "+inbox"))
+      (notmuch-tree-tag (list "+thiscourse" "+courses" "-inbox")))))
+
+(define-key nm-tree-tag-map "c"
+  (lambda ()
+    "toggle courses tag for message"
+    (interactive)
+    (if (member "courses" (notmuch-tree-get-tags))
+        (notmuch-tree-tag (list "-courses" "+inbox"))
+      (notmuch-tree-tag (list "+courses" "-inbox")))))
+
+(define-key nm-tree-tag-map "m"
+  (lambda ()
+    "toggle mEng tag for message"
+    (interactive)
+    (if (member "mEng" (notmuch-tree-get-tags))
+	(notmuch-tree-tag (list "-mEng" "+inbox"))
+      (notmuch-tree-tag (list "+mEng" "-inbox")))))
+
+(define-key nm-tree-tag-map "r"
+  (lambda ()
+    "toggle review tag for message"
+    (interactive)
+    (if (member "review" (notmuch-tree-get-tags))
+	(notmuch-tree-tag (list "-review" "+inbox"))
+      (notmuch-tree-tag (list "+review" "-inbox")))))
+
+(define-key nm-tree-tag-map "g"
+  (lambda ()
+    "toggle grants tag for message"
+    (interactive)
+    (if (member "grants" (notmuch-tree-get-tags))
+	(notmuch-tree-tag (list "-grants" "+inbox"))
+      (notmuch-tree-tag (list "+grants" "-inbox")))))
+
+
+(define-key nm-search-tag-map "t"
+  (lambda ()
+    "toggle courses (and current course) tag for message"
+    (interactive)
+    (if (member "thiscourse" (notmuch-search-get-tags))
+        (notmuch-search-tag (list "-thiscourse" "-courses" "+inbox"))
+      (notmuch-search-tag (list "+thiscourse" "+courses" "-inbox")))))
+
+(define-key nm-search-tag-map "c"
+  (lambda ()
+    "toggle courses tag for message"
+    (interactive)
+    (if (member "courses" (notmuch-search-get-tags))
+        (notmuch-search-tag (list "-courses" "+inbox"))
+      (notmuch-search-tag (list "+courses" "-inbox")))))
+
+(define-key nm-search-tag-map "m"
+  (lambda ()
+    "toggle mEng tag for message"
+    (interactive)
+    (if (member "mEng" (notmuch-search-get-tags))
+	(notmuch-search-tag (list "-mEng" "+inbox"))
+      (notmuch-search-tag (list "+mEng" "-inbox")))))
+
+(define-key nm-search-tag-map "r"
+  (lambda ()
+    "toggle review tag for message"
+    (interactive)
+    (if (member "review" (notmuch-search-get-tags))
+	(notmuch-search-tag (list "-review" "+inbox"))
+      (notmuch-search-tag (list "+review" "-inbox")))))
+
+(define-key nm-search-tag-map "g"
+  (lambda ()
+    "toggle grants tag for message"
+    (interactive)
+    (if (member "grants" (notmuch-search-get-tags))
+	(notmuch-search-tag (list "-grants" "+inbox"))
+      (notmuch-search-tag (list "+grants" "-inbox")))))
+
+
+
+
+
+
+
+
+
+
+(setq notmuch-show-all-multipart/alternative-parts nil)
+
+
+;; send mail through gnus
+(setq message-send-mail-function 'message-send-mail-with-sendmail)
+(setq sendmail-program "/usr/local/bin/msmtpq")
+(setq message-sendmail-f-is-evil t)
+(setq mail-host-address "DOMAIN.EDU")
+(setq user-full-name "Krishnamurthy Iyer")
+(setq user-mail-address "EMAIL@DOMAIN.EDU")
+;; set the folder where outgoing mail must be saved
+(setq notmuch-fcc-dirs "FOLDER/Sent/ +sent -new")
+
+
+(setq notmuch-search-oldest-first nil
+      notmuch-show-indent-messages-width 4
+      message-kill-buffer-on-exit t)
+
+
+
+
+
 
 
 ;;; init.el ends here

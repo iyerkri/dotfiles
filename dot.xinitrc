@@ -10,9 +10,9 @@
 # ...or the Window Manager of your choice
 
 #Following automatically switches output if external monitor is connected.
-xrandr | grep VGA1 | grep " connected"
+xrandr | grep HDMI | grep " connected"
 if [ $? -eq 0 ]; then
-    xrandr --output LVDS1 --off --output VGA1 --auto
+    xrandr --output eDP1 --off --output HDMI1 --auto --output HDMI2 --auto
     # If laptop is in the base, then start the music player daemon
     #mpdscribble
     #mpd /home/kriyer/.mpd/config
@@ -20,11 +20,12 @@ if [ $? -eq 0 ]; then
     # (sleep 2; xrandr --auto) &
 fi
 xset -b
-xset +fp /usr/share/fonts/local
-xset fp rehash
+#xset +fp /usr/share/fonts/local
+#xset fp rehash
 xsetroot -cursor_name left_ptr
 xbacklight =40
-files=(/home/kriyer/art/wallpapers/tiling-wallpapers/*)
+#files=(/home/kriyer/art/wallpapers/tiling-wallpapers/*)
+files=(/home/kriyer/linux/wallpapers/tiles/best/*)
 feh --bg-tile `printf "%s\n" "${files[RANDOM % ${#files[@]}]}"`
 #feh --bg-scale '/home/kriyer/art/wallpapers/wallpaper.png'
 # while true; 
@@ -37,9 +38,17 @@ feh --bg-tile `printf "%s\n" "${files[RANDOM % ${#files[@]}]}"`
 # exec /home/kriyer/dwm/dwm-072c62ed10f2/dwm
 xmodmap ~/.Xmodmap
 xrdb -merge .Xresources
-redshift -l 42:-76 &
+redshift -l 45:-93 &
+export ALTERNATE_EDITOR=""
+export EDITOR="emacsclient -t -a emacs -nw"
+export VISUAL="emacsclient -c -a emacs"
+export TERMINAL="urxvtc"
+export XDG_MUSIC_DIR=~/Music
+urxvtd -q -o -f 
+# emacs --daemon
 compton --xrender-sync --xrender-sync-fence -i 0.85 &
 exec /usr/bin/i3
+# exec /usr/bin/bspwm
 # exec /usr/bin/wmii
 # exec /usr/bin/xmonad
 # exec /usr/bin/gnome-session
