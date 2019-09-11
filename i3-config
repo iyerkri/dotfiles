@@ -34,14 +34,6 @@ bindsym $mod+Return exec i3-sensible-terminal
 # kill focused window
 # bindsym $mod+Shift+q kill
 
-# start dmenu (a program launcher)
-set $dmenuCommand "dmenu_run -fn 'Source Code Pro:style=Regular:size=12' -nb '#002b36' -nf '#839496' -sb '#839496' -sf '#002b36'"
-bindsym $mod+p exec $dmenuCommand
-# There also is the (new) i3-dmenu-desktop which only displays applications
-# shipping a .desktop file. It is a wrapper around dmenu, so you need that
-# installed.
-# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
-
 # change focus
 bindsym $mod+h focus left
 bindsym $mod+j focus down
@@ -157,6 +149,55 @@ default_border pixel 3
 
 bindsym $mod+Shift+r mode "resize"
 
+# colors Solarized 
+set $S_yellow  "#b58900"
+set $S_orange  "#cb4b16"
+set $S_red     "#dc322f"
+set $S_magenta "#d33682"
+set $S_violet  "#6c71c4"
+set $S_blue    "#268bd2"
+set $S_cyan    "#2aa198"
+set $S_green   "#859900"
+
+# Dark
+set $S_base0  "#839496"
+set $S_base1  "#93a1a1"
+set $S_base2  "#eee8d5"
+set $S_base3  "#fdf6e3"
+set $S_base00 "#657b83"
+set $S_base01 "#586e75"
+set $S_base02 "#073642"
+set $S_base03 "#002b36"
+
+# Light
+# set $S_base0  "#657b83"
+# set $S_base1  "#586e75"
+# set $S_base2  "#073642"
+# set $S_base3  "#002b36"
+# set $S_base00 "#839496"
+# set $S_base01 "#93a1a1"
+# set $S_base02 "#eee8d5"
+# set $S_base03 "#fdf6e3"
+
+# window colors (e.g. title bar in tabbed mode)
+# class                 border     backgr.     text       indicator    child_border
+client.focused          $S_base03  $S_base01   $S_base3   $S_blue      
+client.focused_inactive $S_base03  $S_base02   $S_base0   $S_base02
+client.unfocused        $S_base03  $S_base02   $S_base0   $S_base02
+client.urgent           $S_base03  $S_red      $S_base3   $S_base03
+client.placeholder      $S_base03  $S_base02   $S_base0   $S_base02
+client.background       $S_base03
+
+
+# start dmenu (a program launcher)
+bindsym $mod+p exec dmenu_run -fn 'Source Code Pro:style=Regular:size=12' -nb $S_base03 -nf $S_base0 -sb $S_base0 -sf $S_base03
+# There also is the (new) i3-dmenu-desktop which only displays applications
+# shipping a .desktop file. It is a wrapper around dmenu, so you need that
+# installed.
+# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+
+
+
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
@@ -166,12 +207,12 @@ bar {
 	#font -*-terminus-medium-*-*-*-22-*-*-*-*-*-*-*
 	font pango:Source Code Pro, Awesome 8 
 	colors {
-	       background #002b36
-	       statusline #839496
-	       urgent_workspace #dc322f #dc322f #ffffff
-	       focused_workspace #839496 #002b36 #839496
-	       inactive_workspace #002b36 #002b36 #586e75
-	       active_workspace #839496 #002b36 #586e75
+	       background $S_base03
+	       statusline $S_base0
+	       urgent_workspace $S_red $S_red $S_base3
+	       focused_workspace $S_base0 $S_base03 
+	       inactive_workspace $S_base03 $S_base03 $S_base00
+	       active_workspace $S_base0 $S_base03 $S_base00
  	}
 }
 
