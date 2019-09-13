@@ -17,7 +17,7 @@ set $mod Mod4
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 #font  -*-terminus-medium-*-*-*-22-*-*-*-*-*-*-*
-font pango:Source Code Pro 20px
+font pango:Source Code Pro 14px
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 # The font above is very space-efficient, that is, it looks good, sharp and
@@ -145,7 +145,7 @@ mode "resize" {
         bindsym Escape mode "default"
 }
 
-default_border pixel 3
+# default_border pixel 3
 
 bindsym $mod+Shift+r mode "resize"
 
@@ -205,7 +205,7 @@ bar {
 	strip_workspace_numbers yes
 	position top
 	#font -*-terminus-medium-*-*-*-22-*-*-*-*-*-*-*
-	font pango:Source Code Pro, Awesome 8 
+	font pango:Source Code Pro, Awesome 10 
 	colors {
 	       background $S_base03
 	       statusline $S_base0
@@ -228,8 +228,14 @@ assign [class="Thunderbird"] 1: mail
 
 # Assign Firefox to workspace 2: web
 
-assign [class="Firefox"] 2: web
+assign [class="firefox"] 2: web
 
 
 for_window [class = "gnuplot_qt"] floating enable
 for_window [class = "gnuplot_qt"] resize set 1600 900
+
+
+# gaps
+for_window [class=".*"] border pixel 1
+gaps inner 20
+gaps outer 5

@@ -9,6 +9,8 @@
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
 
+;; fixes some issues with emacs 26.1 -- should be fixed by 26.3
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
 (require 'package)
 (add-to-list 'package-archives
@@ -117,8 +119,12 @@
   
 ;; Auctex and reftex config
 ;; see https://tex.stackexchange.com/questions/20843/useful-shortcuts-or-key-bindings-or-predefined-commands-for-emacsauctex for more.
-(load "auctex.el" nil t t)
-(load "preview-latex.el" nil t t)
+;; (load "auctex.el" nil t t)
+;; (load "preview-latex.el" nil t t)
+;; no longer needed??
+;; https://emacs.stackexchange.com/questions/19489/unable-to-locate-preview-latex-el-after-installing-the-auctex-package-in-emacs24
+
+
 (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 (setq reftex-plug-into-auctex t)
 ;; Master file compile. In multifile latex projects, this
