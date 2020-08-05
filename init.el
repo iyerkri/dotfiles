@@ -21,7 +21,17 @@
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
 (package-initialize)
+(setq package-enable-at-startup nil)
 
+
+;; Install 'use-package' if necessary
+;; from CachesToCaches
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+;; Enable use-package
+(eval-when-compile (require 'use-package))
+(require 'bind-key)                ;; if you use any :bind variant
 
 
 ;; GUI customizations
@@ -203,6 +213,10 @@
   :ensure t
   :commands (org-bullets-mode)
   :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+(use-package expand-region
+  :bind ("C-'" . er/expand-region)
+  :bind ("C-\"" . er/contract-region))    
 
 ;; notmuch config
 (require 'notmuch)
