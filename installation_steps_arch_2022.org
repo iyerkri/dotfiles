@@ -1,0 +1,73 @@
++ Installed arch-linux from live usb
+
++ add user to wheel. install sudo. install vi, use visudo to enable wheel to run sudo.
+
++ For networking, install iwd. You need to create a /etc/iwd/main.conf file (see wiki) and set EnableNetworkConfiguration=true and NameResolvingService=systemd. Finally, start and enable iwd.service and systemd-resolved.service. Use iwctl to connect to the network.
+
++ Install emacs-gcc-wayland-devel-bin from AUR to have pure wayland installation. (Otherwise fonts are blurry)
+
++ Add systemd-boot, and add the fallback (and if needed, lts) kernel entries to `/boot/loader/entries/`. Add `console-mode 0` (or other options) in `/boot/loader/loader.conf` to adjust the font size in the boot menu.
+
++ Install wayland, sway and also seatd (the latter gives sway permissions to access hardware, an alternative is polkit, which has some vulnerabilities).
+
+
++ install ntp
+
+
++ Install foot, dmenu, fuzzel, waybar (change the sway config to move from dmenu to fuzzel and change the bar to waybar. afterwards, uninstall dmenu). Update: waybar requires upower, which messes up with battery switching when one battery is fully discharged, due to which the laptop crashes. Testing some other options, such as swaybar or polybar.
+
++ install xlsclients to see which apps are running in xwayland
+
++ install texlive-most and choose the relevant ones.
+
++ install font-awesome (otf), nerd-fonts, noto-fonts, noto-fonts-emoji, noto-fonts-extra, libertinus-font, ttf-dejavu,ttf-bitstream-vera, gnu-free-fonts, ttf-ubuntu-font-family, otf-fira-mono, ttf-fira-code, otf-fira-sans, terminus-font, dina-font, ttf-roboto, ttf-roboto-mono
+
++ install firefox. For full wayland support, set the environment variable `export MOZ_ENABLE_WAYLAND=1` in .bash_profile and logout and log back in.
+
++ bash-completion
+
++ mlocate for searching files. Need a reboot before the database is updated, or run updatedb as root.
+
++ install util-linux and enable fstrim.timer for maintainence of SSD drives
+
++ install git, set up git config (user.name, user.email and core.editor)
+
++ install gpg, and import sec-key-backup and trustdb-backup
+
++ install dropbox (need to import gpg key -- see aur)
+
+
+
++ ntfs-3g
+
++ install pass and restore the password-store backup
+
++ install mako
+
++ install ddclient, edit ddclient with opendns settings to manage dynamic ip (refer opendns page for 'linux ip updater'), and start and enable the ddclient systemd service
+
++ install python-scipy, python-numpy, python-matplotlib, python-sympy, jupyter-notebook,
+
++ install gimp, inkscape, imagemagick
+
++ install clapper from AUR (for videos)
+
+
++ Install Thunar. Thunar has optional dependency of gvfs, which enables automount features, but gvfs needs polkit.  Add a custom action to Thunar to open a terminal here. Edit .desktop files (for emacsclient).
+
+
++ Install file-roller and thunar-archive-plugin. File-roller allows for handling archives.
+
++ Install tlp (and some optional dependencies). acpi_call is not needed anymore. similarly, tpacpi-bat is not needed.
+
++ On HiDPI, we would need to fix the fonts. Use gnome org settings and set text-scaling-factor equal to 1. Then, on Firefox, change the zoom to ~120%, and select zoom text only option.
+- This does not really work if one is changing display. Instead, I have reverted back to the default zoom on Firefox, and a text-scaling-factor of 1.2.
+
++ install xdg-desktop-portal-wlr to enable screen sharing on Zoom (see https://wiki.archlinux.org/title/PipeWire#WebRTC_screen_sharing).
+
+
+* Security and privacy related items: Added 2025-02-02
+
++ install the firewall ufw (see wiki)
++ consider enabling mandatory access control, by installing apparmor and related utils.
++ Check out LUKS on LVM. LUKS is for hard disk encryption. LVM is logical volume management.

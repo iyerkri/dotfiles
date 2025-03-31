@@ -1,0 +1,133 @@
+# setfont ter-132b
+
+1. create wpa.conf as follows:
+``
+# wpa.conf
+network={
+	ssid="<SSID>"
+	psk="<passphrase>"
+}
+``
+Then, run the following command
+# wpa_supplicant -i wlan0 -c wpa.conf -B
+
+Give it 30 seconds before checking with ping.
+
+2.
+
+# timedatectl
+
+3. partition (from ChatGPT)
+
+
+How to set it up: During Arch installation, you can configure this
+manually (the Arch installer or archinstall script might also assist):
+
++ Partition the disk as discussed: create an unencrypted EFI partition
+  (for boot), and designate an upcoming partition for Linux (to be
+  encrypted). For example, /dev/nvme0n1p1 = ESP, /dev/nvme0n1p2 =
+  Windows (NTFS), /dev/nvme0n1p3 = LUKS container for Arch. Also
+  create another partition /dev/nvme0n1p4 for the shared data if you
+  choose.
++ Set up LUKS on the Linux partition: Use cryptsetup luksFormat
+  /dev/nvme0n1p3 to initialize LUKS encryption on it (this will prompt
+  you for a passphrase). Then open it with cryptsetup open
+  /dev/nvme0n1p3 cryptroot (after opening, the encrypted device is
+  accessible at /dev/mapper/cryptroot). At this point, you have an
+  unlocked encrypted block device.
++  Set up LVM inside that encrypted device: use pvcreate
+  /dev/mapper/cryptroot to make it a physical volume for LVM, then
+  vgcreate ArchVG /dev/mapper/cryptroot to create a volume group, and
+  finally create logical volumes: e.g. lvcreate -L 40G -n root ArchVG
+  for the root filesystem, lvcreate -L 8G -n swap ArchVG for swap (if
+  using swap), and lvcreate -l 100%FREE -n home ArchVG for home (using
+  all remaining space). Adjust sizes to your needs (you could also
+  leave some space free for future expansion if desired).
++  Make filesystems on the logical volumes (ext4 on root and home,
+  swap on the swap LV).
++  Mount and install Arch as usual (mount the new ext4 volumes to /mnt
+  and /mnt/home, enable swap, mount the ESP to /mnt/boot or /mnt/efi,
+  etc., then proceed with pacstrap).
++  Configure bootloader with encryption: If using GRUB, you’d install
+  grub to the ESP and configure /etc/default/grub with the cryptdevice
+  parameter so it knows to prompt for the LUKS passphrase at boot. If
+  using systemd-boot, you’d ensure the initramfs has the encrypt hook
+  and add an entry that points to the encrypted volume.
+
+
+4. May need to do the following to activate the logical volumes(?):
+# vgscan --mknodes
+# vgchange -ay
+
+check if LVs are visible:
+# ls /dev/mapper/
+
+5. format partitions and mount in /mnt, /mnt/efi, /mnt/boot, /mnt/home
+   (and swap)
+
+6. Install the base system
+
+# pacstrap -K /mnt base linux linux-firmware amd-ucode lvm2 wpa_supplicant nano vi
+
+
+6.5 chroot
+
+# arch-chroot /mnt
+
+7. Login setup:
+
+# pacman -S grub lvm2 cryptsetup efibootmgr
+
+Install GRUB to the EFI system partition:
+
+# grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
+
+# nano /etc/default/grub
+GRUB_CMDLINE_LINUX="cryptdevice=UUID=<YOUR-LUKS-UUID>:cryptroot root=/dev/mapper/ArchVG-root"
+
+Use the following command to get UUID
+# blkid /dev/nvme0n1p3
+
+(From Arch wiki:) To have grub-mkconfig search for other installed
+systems and automatically add them to the menu, install the os-prober
+package and mount the partitions from which the other systems boot.
+Then re-run grub-mkconfig. If you get the following output: Warning:
+os-prober will not be executed to detect other bootable partitions
+then edit /etc/default/grub and add/uncomment:
+
+# /etc/default/grub
+GRUB_DISABLE_OS_PROBER=false
+
+Then try again.
+
+If you use LVM for your /boot or / root partition, make sure that the
+lvm module is preloaded:
+
+# /etc/default/grub
+GRUB_PRELOAD_MODULES="... lvm"
+
+8. Configuring mkinitcpio
+
+Make sure the lvm2 package is installed. Order below is important.
+
+# nano /etc/mkinitcpio.conf
+HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block encrypt lvm2 filesystems fsck)
+
+# mkinitcpio -P
+
+Then regenerate the GRUB configuration file:
+
+# grub-mkconfig -o /boot/grub/grub.cfg
+
+9. Set password
+# passwd
+
+10. Exit chroot:
+
+# exit
+# umount -R /mnt
+# reboot
+
+
+after installing, you'd start wpa_supplicant but also need to
+enable/start the systemctl service systemd-resolved for dns to work.
