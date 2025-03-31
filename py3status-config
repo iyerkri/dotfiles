@@ -1,0 +1,168 @@
+# i3status configuration file.
+# see "man i3status" for documentation.
+# save this file as ~/.config/i3status/config
+
+# It is important that this file is edited as UTF-8.
+# The following line should contain a sharp s:
+# ß
+# If the above line is not correctly displayed, fix your editor first!
+
+
+
+#general {
+        #colors = true
+
+	#color_good =  "#839496" #base04
+	#color_degraded = "#b58900" #base0A
+	#color_bad = "#cb4b16"  #base09
+	#color_separator = "#839496" #base04
+	# Light
+	#color_good = "#657b83"  #base04
+	#color_degraded = "#859900" #base0B
+	#color_bad = "#cb4b16"  #base09
+	#color_separator = "#657b83" #base04
+
+        #interval = 5
+#}
+
+
+order += "loadavg"
+order += "group data"
+order += "wifi"
+order += "battery_level 0"
+order += "battery_level 1"
+order += "bluetooth"
+order += "volume_status"
+order += "group timezones"
+#order += "clock"
+
+
+py3status {
+     #background = ''
+     #border = '#839496'
+     #border_bottom = 1
+     #border_left = 1
+     #border_right = 1
+     #border_top = 1
+     align = 'left'
+     markup = 'pango'
+     color = "#839496"
+     min_width = 20
+     separator = True
+     separator_block_width = 9
+
+     allow_urgent = true
+     urgent_background  = '#cb4b16'
+     urgent_foreground = 'white'
+     urgent_border = '#e87135'
+     urgent_border_bottom = 2
+     urgent_border_left = 1
+     urgent_border_right = 2
+     urgent_border_top = 1
+
+     color_good =  "#839496" #base04
+     color_degraded = "#b58900" #base0A
+     color_bad = "#cb4b16"  #base09
+     color_separator = "#839496" #base04
+}
+
+
+wifi {
+     format = " ({signal_percent}󰏰 {ssid})| "
+}
+
+
+
+
+battery_level 0 {
+     battery_id = 0
+     format = "[{status} {percent}󰏰 {time_remaining}]"
+     format_status_charging = ""
+     format_status_discharging = ""
+     format_status_degraded = ""
+     format_status_bad = ""
+     format_status_full = ""
+}
+
+battery_level 1 {
+     battery_id = 1
+     format = "[{status} {percent}󰏰 {time_remaining}]"
+     format_status_charging = ""
+     format_status_discharging = ""
+     format_status_degraded = ""
+     format_status_bad = ""
+     format_status_full = ""
+}
+
+bluetooth {
+     color_bad = "grey"
+     color_good = "green"
+     format = ": {format_adapter}"
+}
+
+
+
+group timezones {
+      format = "{output}"
+      button_next = 1
+
+      clock central {
+      	    format = ["{US/Central}"]
+	    format_time = ['MSP %H:%M', '%Y/%m/%d']
+      }
+
+      clock mountain {
+      	    format = ["{America/Denver}"]
+	    format_time = ['DEN %H:%M', '%Y/%m/%d']
+      }
+
+      clock india {
+      	    format = ["{Asia/Kolkata}"]
+	    format_time = ['BOM %H:%M', '%Y/%m/%d']
+      }
+}
+
+
+group data {
+      format = "{output}"
+      button_next = 1
+
+      sysdata mem {
+      	      format = "[\?color=mem_used_percent : {mem_used:.1f}{mem_total_unit}]"
+      }
+
+      sysdata cpu {
+      	      format = "[\?color=cpu_used_percent : {cpu_used_percent}󰏰]"
+      }
+
+      diskdata home {
+      	      disk = "/dev/nvme0n1p9"
+	      format = "[\?color=used_percent :{free}G]"
+      }
+
+      diskdata root {
+      	      disk = "/dev/nvme0n1p7"
+	      format = "[\?color=used_percent :{free}G]"
+      }
+
+}
+
+#clock {
+#     format = ["{US/Central}", "{America/Denver}", "{Asia/Kolkata}"]
+#     format_time = ['%Z %H:%M', '%z:%m/%d'] 
+#}
+
+loadavg {
+     format = "[ {1min} {5min}]"
+}
+
+
+
+volume_status {
+     format = ": {percentage}󰏰"
+     format_muted = ": "
+}
+
+
+
+

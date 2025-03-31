@@ -9,8 +9,6 @@
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
 
-;; fixes some issues with emacs 26.1 -- should be fixed by 26.3
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
 (require 'package)
 (add-to-list 'package-archives
@@ -34,73 +32,160 @@
 (require 'bind-key)                ;; if you use any :bind variant
 
 
+;; recentf
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(global-set-key "\C-c\ \C-r" 'recentf-open-files)
+
+;; Install 'no-littering' to keep emacs.d clearn
+;; https://manueluberti.eu/emacs/2017/06/17/nolittering/
+;; note: no-littering moves the backup files to 'no-littering-var-directory'
+(use-package no-littering
+  :ensure t
+  :config
+  (require 'recentf)
+  (add-to-list 'recentf-exclude no-littering-var-directory)
+  (add-to-list 'recentf-exclude no-littering-etc-directory))
+
+
+;; native compilation delete old files
+(setq native-compile-prune-cache t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; GUI customizations
-(setq-default cursor-type 'box)
-(set-cursor-color "#859900")
-(blink-cursor-mode -1)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(tool-bar-mode -1)
+(menu-bar-mode 1)
+(scroll-bar-mode -1)
 (line-number-mode 1)
 (column-number-mode 1)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
+(blink-cursor-mode -1)
+
+(setq inhibit-startup-screen t
+      initial-scratch-message nil
+      initial-major-mode 'org-mode
+      use-dialog-box nil)
+
+
+;; Emacs for you
+;; https://github.com/susam/emfy
+(setq-default show-trailing-whitespace t)
+(setq-default indicate-empty-lines t)
+(setq-default indicate-buffer-boundaries 'left)
+(setq sentence-end-double-space nil)
+
+(load-theme 'modus-vivendi)
+
+;; Set default font
+;; little complicated with daemon mode, as one must
+;; set the font after the first FRAME is created.
+;; So, we create a function, add it to a hook, and
+;; remove it after first run. See, e.g.,
+;; emacs.stackexchange.com/questions/59791/font-and-frame-configuration-in-daemon-mode
+
+(defun my-set-font (FRAME)
+  "Set font given initial FRAME.
+Intended for `after-make-frame-functions'. Remove self after
+first run."
+  (with-selected-frame FRAME
+    (set-frame-font "Iosevka NFM 12" nil t)
+    (remove-hook 'after-make-frame-functions #'my-set-font)))
+
+(add-hook 'after-make-frame-functions #'my-set-font)
+
+;; Change cursor color when entering overwrite mode
+;; Inspiration from http://emacs-fu.blogspot.com/2009/12/changing-cursor-color-and-shape.html
+;; The code there had issues, so this is a complete overhaul (but does less).
+
+(defvar cursor-previous-color (face-attribute 'cursor :background)
+  "Previous cursor color.")
+
+(defun overwrite-cursor-warning ()
+  "Toggle the cursor to red color if entering overwrite mode."
+
+  (if (eval overwrite-mode)
+      (progn
+	(setq cursor-previous-color (face-attribute 'cursor :background))
+	(set-cursor-color "red"))
+    (progn
+      (set-cursor-color cursor-previous-color))))
+
+(add-hook 'overwrite-mode-hook 'overwrite-cursor-warning)
 
 
 
-;; Modified from http://emacs-fu.blogspot.com/2009/12/changing-cursor-color-and-shape.html
-(setq cursor-read-only-color       "gray")
-;; valid values are t, nil, box, hollow, bar, (bar . WIDTH), hbar,
-;; (hbar. HEIGHT); see the docs for set-cursor-type
-(setq cursor-read-only-cursor-type 'bar)
-(setq cursor-overwrite-color       "red")
-(setq cursor-overwrite-cursor-type 'box)
-(setq cursor-normal-color          "#859900")
-(setq cursor-normal-cursor-type    'box)
+;; text scaling on hidpi
+;; hopefully temporary
+(defun text-scale-shortcut ()
+  "Increase font size to reasonable size and back."
+  (interactive)
 
-(defun set-cursor-according-to-mode ()
-  "Change cursor color and type according to some minor modes."
+  (if (eval text-scale-mode)
+      (text-scale-increase 0)
+    (text-scale-increase 3)))
 
-  (cond
-    (buffer-read-only
-      (set-cursor-color cursor-read-only-color)
-      (setq cursor-type cursor-read-only-cursor-type))
-    (overwrite-mode
-      (set-cursor-color cursor-overwrite-color)
-      (setq cursor-type cursor-overwrite-cursor-type))
-    (t 
-      (set-cursor-color cursor-normal-color)
-      (setq cursor-type cursor-normal-cursor-type))))
+(text-scale-increase 0) ;; call needed to set text-scale-mode
+(global-set-key (kbd "C-x y") 'text-scale-shortcut)
 
-(add-hook 'post-command-hook 'set-cursor-according-to-mode)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Miscellaneous
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(setq history-length 25)
+(savehist-mode 1)
+(save-place-mode 1)
+(set-language-environment "UTF-8")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+
+;; endless unfill
+;; http://endlessparentheses.com/fill-and-unfill-paragraphs-with-a-single-key.html
+(defun endless/fill-or-unfill ()
+  "Like `fill-paragraph', but unfill if used twice."
+  (interactive)
+  (let ((fill-column
+         (if (eq last-command 'endless/fill-or-unfill)
+             (progn (setq this-command nil)
+                    (point-max))
+           fill-column)))
+    (call-interactively #'fill-paragraph)))
+
+(global-set-key [remap fill-paragraph] #'endless/fill-or-unfill)
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Packages
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Solarized theme + customizations
-(use-package solarized-theme
-  :ensure t
-  :init
-  (setq solarized-use-variable-pitch nil)  ;; no font size changes
-  (setq solarized-emphasize-indicators nil) ;; less emphasis on errors
-  (load-theme 'solarized-dark t))
+;; (use-package solarized-theme
+;;  :ensure t
+;;  :init
+;;  (setq solarized-use-variable-pitch nil)  ;; no font size changes
+;;  (setq solarized-emphasize-indicators nil) ;; less emphasis on errors
+;;  (load-theme 'solarized-dark t))
 
-
-;; powerline
-(use-package powerline
-  :ensure t
-  :init (powerline-default-theme))
 
 ;; smart-mode-line
 (use-package smart-mode-line
   :ensure t
   :config
-  (sml/setup)
-  (setq sml/theme 'automatic))
-
+  (setq sml/theme 'automatic)
+  (sml/setup))
 
 ;; flycheck
 (use-package flycheck
   :ensure t
   :init (global-flycheck-mode))
-
 
 ;; needs to happen before helm?
 (use-package helm-flx
@@ -108,13 +193,11 @@
   :config
   (helm-flx-mode 1))
 
-
 (use-package helm
   :ensure t
   :bind (("M-x" . helm-M-x)
-	 ("C-x C-f" . helm-find-files)))
-
-
+	 ("C-x C-f" . helm-find-files)
+	 ("C-c C-r" . helm-recentf)))
 
 ;; pdf-tools
 (use-package pdf-tools
@@ -126,29 +209,23 @@
   (setq pdf-annot-activate-created-annotations t))
 
 
-  
-;; Auctex and reftex config
-;; see https://tex.stackexchange.com/questions/20843/useful-shortcuts-or-key-bindings-or-predefined-commands-for-emacsauctex for more.
-;; (load "auctex.el" nil t t)
-;; (load "preview-latex.el" nil t t)
-;; no longer needed??
-;; https://emacs.stackexchange.com/questions/19489/unable-to-locate-preview-latex-el-after-installing-the-auctex-package-in-emacs24
 
 
-(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
-(setq reftex-plug-into-auctex t)
-;; Master file compile. In multifile latex projects, this
-;; settings allows one to "compile" slave files.
-;; http://www.gnu.org/software/auctex/manual/auctex/Multifile.html
-(setq-default TeX-master nil) ; Query for master file.
-
-;; Use pdf-tools to open PDF files
-(setq TeX-view-program-selection '((output-pdf "PDF Tools"))
-      TeX-source-correlate-start-server t)
-
-;; Update PDF buffers after successful LaTeX runs
-(add-hook 'TeX-after-compilation-finished-functions
-	  #'TeX-revert-document-buffer)
+;; auctex
+;; https://www.gnu.org/software/auctex/manual/auctex.html#Installation
+(use-package tex
+  :ensure auctex
+  :config
+  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+  (setq reftex-plug-into-auctex t)
+  ;; http://www.gnu.org/software/auctex/manual/auctex/Multifile.html
+  (setq-default TeX-master nil) ; Query for master file.
+  ;; Use pdf-tools to open PDF files
+  (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+	TeX-source-correlate-start-server t)
+  ;; Update PDF buffers after successful LaTeX runs
+  (add-hook 'TeX-after-compilation-finished-functions
+	    #'TeX-revert-document-buffer))
 
 
 ;; latex-extra
@@ -173,34 +250,57 @@
 (use-package beacon
   :ensure t
   :config
-  (beacon-mode t)
-  (setq beacon-color cursor-normal-color))
+  (beacon-mode t))
+
+;; which-key
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-mode)
+  (which-key-setup-side-window-right-bottom))
+
+
+;; (use-package org-bullets
+;;   :ensure t
+;;   :commands (org-bullets-mode)
+;;   :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+
+(use-package org-modern
+  :ensure t
+  :init (add-hook 'org-mode-hook  'org-modern-mode))
 
 
 ;; org-mode config
-;; added from many places: David O'Toole Org tutorial
-;; and Aaron Bedra's Emacs 26 Configuration
-(require 'org)
-(add-to-list 'org-modules "org-habit")
-(setq org-habit-preceding-days 7
-      org-habit-following-days 1
-      org-habit-graph-column 80
-      org-habit-show-habits-only-for-today t
-      org-habit-show-all-today t)
-		    
-(define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-ca" 'org-agenda)
-(setq org-log-done t
-      org-todo-keywords '((sequence "TODO" "INPROGRESS" "DONE"))
-      org-todo-keyword-faces '(("INPROGRESS" . (:foreground "blue" :weight bold))))
+;; GTD setup inspired from https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html
+(global-set-key (kbd "C-c l") #'org-store-link)
+(global-set-key (kbd "C-c a") #'org-agenda)
+(global-set-key (kbd "C-c c") #'org-capture)
 
-(setq org-agenda-files 
-      (list "~/Dropbox/org/work.org"  "~/Dropbox/org/research.org" "~/Dropbox/org/personal.org"))
+(setq org-agenda-files
+      '("~/Dropbox/org/inbox.org"
+	"~/Dropbox/org/gtd.org"
+	"~/Dropbox/org/tickler.org"))
 
 
-(setq org-agenda-show-log t
-      org-agenda-todo-ignore-scheduled t
-      org-agenda-todo-ignore-deadlines t)
+(setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "DELEGATED(g)" "|" "DONE(d)" "CANCELLED(c)")))
+(setq org-log-done "time")
+(add-hook 'org-trigger-hook 'save-buffer)
+
+(setq org-capture-templates
+      '(("t" "Todo [inbox]" entry
+	 (file+headline "~/Dropbox/org/inbox.org" "Tasks") "* TODO %i%?")
+        ("T" "Tickler" entry
+	 (file+headline "~/Dropbox/org/tickler.org" "Tickler")  "* %i%? \n %U")))
+
+(setq org-refile-targets '(("~/Dropbox/org/gtd.org" :maxlevel . 3)
+                           ("~/Dropbox/org/someday.org" :level . 1)
+                           ("~/Dropbox/org/tickler.org" :maxlevel . 2)))
+
+
+(setq org-agenda-warning-days 7
+      org-agenda-todo-ignore-scheduled "future"
+      org-agenda-todo-ignore-deadlines "far")
 
 ;; stolen from https://zzamboni.org/post/beautifying-org-mode-in-emacs/
 (setq org-hide-emphasis-markers t)
@@ -209,14 +309,13 @@
                         '(("^ *\\([-]\\) "
                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
-(use-package org-bullets
-  :ensure t
-  :commands (org-bullets-mode)
-  :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
 
 (use-package expand-region
+  :ensure t
   :bind ("C-'" . er/expand-region)
-  :bind ("C-\"" . er/contract-region))    
+  :bind ("C-\"" . er/contract-region))
+
 
 ;; notmuch config
 (require 'notmuch)
@@ -238,7 +337,7 @@
       (notmuch-tree-tag (list "+deleted"))))
 
 (defun nm-search-delete ()
-  "Toggle deleted tag for message."  
+  "Toggle deleted tag for message."
     (interactive)
     (if (member "deleted" (notmuch-search-get-tags))
         (notmuch-search-tag (list "-deleted"))
@@ -378,7 +477,29 @@
 
 
 
+;;(define-key nm-tag-map "c"
+;;  (lambda ()
+;;    "toggle courses tag for message"
+;;    (interactive)
+;;    (if (member "courses" (notmuch-tree-get-tags))
+;;        (notmuch-tree-tag (list "-courses" "+inbox"))
+;;      (notmuch-tree-tag (list "+courses" "-inbox")))))
 
+;;(define-key notmuch-tree-mode-map "o"
+  ;; (lambda ()
+  ;;   "toggle courses (and current course) tag for message"
+  ;;   (interactive)
+  ;;   (if (member "thiscourse" (notmuch-tree-get-tags))
+  ;; 	(notmuch-tree-tag (list "-thiscourse" "-courses" "+inbox"))
+  ;;     (notmuch-tree-tag (list "+thiscourse" "+courses" "-inbox")))))
+
+;; (define-key notmuch-search-mode-map "o"
+;;   (lambda ()
+;;     "toggle courses (and current course) tag for thread"
+;;     (interactive)
+;;     (if (member "thiscourse" (notmuch-tree-get-tags))
+;;         (notmuch-tree-tag (list "-thiscourse" "-courses" "+inbox"))
+;;       (notmuch-tree-tag (list "+thiscourse" "+courses" "-inbox")))))
 
 
 
@@ -402,11 +523,6 @@
 (setq notmuch-search-oldest-first nil
       notmuch-show-indent-messages-width 4
       message-kill-buffer-on-exit t)
-
-
-
-
-
 
 
 ;;; init.el ends here
